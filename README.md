@@ -1,116 +1,91 @@
-# Pipeline Prospection LDG-SCHOOL
+# Pipeline Prospection LDG-School
 
-Système de pipeline de prospection commerciale pour **LDG-SCHOOL** — plateforme de formation et d'accompagnement scolaire.
+Pipeline de prospection commerciale pour **LDG-School**.
 
 ---
 
-## Vue d'ensemble
+## Objectif
 
-Ce pipeline structure l'ensemble du processus de prospection, depuis l'identification des leads jusqu'à la conversion en clients, en passant par la qualification, la prise de contact et le suivi.
+Automatiser et structurer la prospection commerciale de LDG-School, depuis la génération de leads jusqu'à la prise de contact, en ciblant les bons interlocuteurs au sein des entreprises.
+
+---
+
+## Cibles
+
+| Profil | Description |
+|---|---|
+| **DRH / RH** | Responsables ressources humaines en charge de la formation et du développement des collaborateurs |
+| **Dirigeants PME** | Dirigeants et fondateurs de PME sensibles aux enjeux de formation et de montée en compétences |
+| **CIP** | Conseillers en Insertion Professionnelle accompagnant des publics en reconversion ou en recherche d'emploi |
+
+---
+
+## Entrées du Pipeline
+
+### 1. Prospection active — LinkedIn via Unipile
+
+- Recherche et identification de profils LinkedIn correspondant aux 3 cibles
+- Envoi de messages de prospection personnalisés via l'API Unipile
+- Suivi des réponses et relances automatisées via n8n
+
+### 2. Leads entrants — Landing page
+
+- Formulaire de contact ou d'inscription sur la landing page LDG-School
+- Capture automatique du lead dans Supabase
+- Déclenchement d'un workflow n8n à la réception du lead
+
+---
+
+## Architecture technique
 
 ```
-Identification → Qualification → Contact → Présentation → Suivi → Conversion
+LinkedIn (Unipile)          Landing page
+       │                         │
+       ▼                         ▼
+   Unipile API              Formulaire web
+       │                         │
+       └──────────┬──────────────┘
+                  ▼
+                 n8n
+          (orchestration)
+                  │
+        ┌─────────┴─────────┐
+        ▼                   ▼
+    Supabase            Claude Code
+  (stockage leads)    (personnalisation
+                       des messages)
 ```
 
 ---
 
-## Étapes du Pipeline
+## Stack
 
-### 1. Identification des Leads
-- **Sources** : réseaux sociaux, recommandations, événements scolaires, partenariats
-- **Critères** : familles avec enfants scolarisés (collège / lycée), établissements privés, CPE
-- **Outils** : scraping LinkedIn, Google Maps, annuaires scolaires
-
-### 2. Qualification
-- Vérification des besoins (soutien scolaire, orientation, prépa examens)
-- Scoring du lead (chaud / tiède / froid)
-- Segmentation par profil : **parent**, **établissement**, **entreprise partenaire**
-
-### 3. Prise de Contact
-- Email personnalisé (séquence automatisée)
-- Appel téléphonique de découverte (script dédié)
-- Message LinkedIn / Instagram
-- Délai de relance : J+3, J+7, J+14
-
-### 4. Présentation de l'Offre
-- Envoi du pitch deck LDG-SCHOOL
-- Démonstration de la plateforme (démo live ou vidéo)
-- Envoi de la proposition commerciale adaptée
-
-### 5. Suivi & Négociation
-- Réponse aux objections (grille objections/réponses)
-- Ajustement de l'offre si nécessaire
-- Relance automatique après silence
-
-### 6. Conversion & Onboarding
-- Signature du contrat / bon de commande
-- Accueil et onboarding de l'élève / de l'établissement
-- Suivi satisfaction J+30
+| Outil | Rôle |
+|---|---|
+| **Unipile** | Connexion LinkedIn, envoi et réception de messages |
+| **n8n** | Orchestration des workflows et automatisations |
+| **Supabase** | Base de données des leads, suivi des statuts |
+| **Claude Code** | Personnalisation des messages de prospection |
 
 ---
 
-## Structure du Repo
+## Structure du repo
 
 ```
 pipeline-ldgschool/
 ├── README.md
-├── leads/
-│   ├── sources.md           # Liste des sources de leads
-│   └── scoring.md           # Grille de scoring
-├── scripts/
-│   ├── email_sequences/     # Templates emails de prospection
-│   ├── call_scripts/        # Scripts d'appel téléphonique
-│   └── linkedin_messages/   # Messages LinkedIn/DM
-├── offres/
-│   ├── pitch_deck.pdf       # Présentation commerciale
-│   └── tarifs.md            # Grille tarifaire
-├── suivi/
-│   ├── crm_template.csv     # Template suivi CRM
-│   └── kpis.md              # Indicateurs de performance
+├── workflows/
+│   └── n8n/               # Exports des workflows n8n
+├── messages/
+│   ├── drh.md             # Templates messages DRH/RH
+│   ├── dirigeants.md      # Templates messages Dirigeants PME
+│   └── cip.md             # Templates messages CIP
+├── supabase/
+│   └── schema.sql         # Schéma de la base leads
 └── docs/
-    └── onboarding.md        # Guide d'onboarding client
+    └── setup.md           # Guide d'installation et configuration
 ```
 
 ---
 
-## KPIs du Pipeline
-
-| Indicateur | Objectif |
-|---|---|
-| Leads identifiés / mois | 200+ |
-| Taux de qualification | > 40% |
-| Taux de prise de contact | > 60% |
-| Taux de démo réalisée | > 25% |
-| Taux de conversion final | > 10% |
-| Délai moyen de conversion | < 21 jours |
-
----
-
-## Stack & Outils
-
-- **CRM** : Notion / HubSpot / Airtable
-- **Emailing** : Lemlist / Brevo
-- **Automatisation** : Make (Integromat) / Zapier
-- **Tracking** : Google Analytics, UTM tags
-- **Communication** : Slack (équipe), WhatsApp Business (prospects)
-
----
-
-## Contribuer
-
-1. Fork le repo
-2. Crée une branche (`feature/ma-contribution`)
-3. Commit tes modifications
-4. Ouvre une Pull Request
-
----
-
-## Contact
-
-**LDG-SCHOOL** — *Élever chaque élève à son plein potentiel*  
-📧 contact@ldg-school.fr  
-🌐 [ldg-school.fr](https://ldg-school.fr)
-
----
-
-*Pipeline maintenu par l'équipe commerciale LDG-SCHOOL.*
+*Pipeline LDG-School — prospection B2B automatisée.*
