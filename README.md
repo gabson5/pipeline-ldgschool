@@ -74,21 +74,24 @@ LinkedIn (Unipile)          Landing page
 ```
 pipeline-ldgschool/
 ├── README.md
-├── .env.example                  # Variables d'environnement à configurer
+├── .env.example                   # Variables d'environnement à configurer
+├── .gitignore
 ├── supabase/
-│   ├── client.ts                 # Client Supabase typé
-│   ├── leads.ts                  # insertLead / getLeads / updateLeadStatut
-│   └── types.ts                  # Types TypeScript générés depuis le schéma
+│   ├── client.ts                  # Client Supabase typé
+│   ├── leads.ts                   # insertLead / getLeads / updateLeadStatut
+│   └── types.ts                   # Types TypeScript générés depuis le schéma
+├── unipile/
+│   └── client.ts                  # startLinkedInChat / sendLinkedInMessage / sendProspectionMessage
 ├── messages/
-│   ├── drh.md                    # Template LinkedIn → DRH/RH
-│   ├── dirigeants.md             # Template LinkedIn → Dirigeants PME
-│   ├── cip.md                    # Template LinkedIn → CIP
-│   ├── reseau-proche.md          # Réactivation réseau proche
-│   └── reseau-croise.md          # Prise de contact réseau croisé
+│   ├── drh.md                     # Template LinkedIn → DRH/RH
+│   ├── dirigeants.md              # Template LinkedIn → Dirigeants PME
+│   ├── cip.md                     # Template LinkedIn → CIP
+│   ├── reseau-proche.md           # Réactivation réseau proche
+│   └── reseau-croise.md           # Prise de contact réseau croisé
 ├── workflows/
-│   └── n8n/                      # Exports des workflows n8n
+│   └── n8n/                       # Exports des workflows n8n
 └── docs/
-    └── setup.md                  # Guide d'installation complet
+    └── setup.md                   # Guide d'installation complet
 ```
 
 ---
@@ -108,11 +111,13 @@ pipeline-ldgschool/
 | `source` | TEXT | `linkedin`, `landing_page` |
 | `date_contact` | DATE | — |
 | `notes` | TEXT | — |
+| `unipile_provider_id` | TEXT | ID LinkedIn du prospect (Unipile) |
+| `unipile_chat_id` | TEXT | ID du chat Unipile après premier contact |
 | `created_at` | TIMESTAMPTZ | auto |
 
 ---
 
-## Fonctions TypeScript disponibles
+## Fonctions Supabase
 
 ```ts
 // Insérer un lead
@@ -123,6 +128,31 @@ getLeads(filters?: { statut?: LeadStatut, cible?: LeadCible }): Promise<Lead[]>
 
 // Mettre à jour le statut d'un lead
 updateLeadStatut(id: string, statut: LeadStatut): Promise<Lead>
+```
+
+## Fonctions Unipile
+
+```ts
+// Point d'entrée unique — nouveau contact ou relance
+sendProspectionMessage({ accountId, text, providerId?, chatId? }): Promise<ProspectionResult>
+
+// Démarrer une nouvelle conversation LinkedIn
+startLinkedInChat(accountId, providerId, text): Promise<ChatStartedResponse>
+
+// Envoyer un message dans un chat existant
+sendLinkedInMessage(chatId, text): Promise<MessageSentResponse>
+```
+
+---
+
+## Variables d'environnement
+
+```
+SUPABASE_URL=https://xlznpdmnnbrujjawydrm.supabase.co
+SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+
+UNIPILE_API_KEY=...
+UNIPILE_DSN=api15.unipile.com:14545
 ```
 
 ---
