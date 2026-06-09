@@ -20,37 +20,43 @@ export type Database = {
           statut:       'froid' | 'tiede' | 'chaud' | null
           cible:        'DRH' | 'Dirigeant' | 'CIP' | null
           source:       'linkedin' | 'landing_page' | null
-          date_contact: string | null
-          notes:        string | null
-          created_at:   string
+          date_contact:        string | null
+          notes:               string | null
+          unipile_chat_id:     string | null
+          unipile_provider_id: string | null
+          created_at:          string
         }
         Insert: {
-          id?:          string
-          prenom?:      string | null
-          nom?:         string | null
-          email?:       string | null
-          poste?:       string | null
-          entreprise?:  string | null
-          statut?:      'froid' | 'tiede' | 'chaud' | null
-          cible?:       'DRH' | 'Dirigeant' | 'CIP' | null
-          source?:      'linkedin' | 'landing_page' | null
-          date_contact?: string | null
-          notes?:       string | null
-          created_at?:  string
+          id?:                  string
+          prenom?:              string | null
+          nom?:                 string | null
+          email?:               string | null
+          poste?:               string | null
+          entreprise?:          string | null
+          statut?:              'froid' | 'tiede' | 'chaud' | null
+          cible?:               'DRH' | 'Dirigeant' | 'CIP' | null
+          source?:              'linkedin' | 'landing_page' | null
+          date_contact?:        string | null
+          notes?:               string | null
+          unipile_chat_id?:     string | null
+          unipile_provider_id?: string | null
+          created_at?:          string
         }
         Update: {
-          id?:          string
-          prenom?:      string | null
-          nom?:         string | null
-          email?:       string | null
-          poste?:       string | null
-          entreprise?:  string | null
-          statut?:      'froid' | 'tiede' | 'chaud' | null
-          cible?:       'DRH' | 'Dirigeant' | 'CIP' | null
-          source?:      'linkedin' | 'landing_page' | null
-          date_contact?: string | null
-          notes?:       string | null
-          created_at?:  string
+          id?:                  string
+          prenom?:              string | null
+          nom?:                 string | null
+          email?:               string | null
+          poste?:               string | null
+          entreprise?:          string | null
+          statut?:              'froid' | 'tiede' | 'chaud' | null
+          cible?:               'DRH' | 'Dirigeant' | 'CIP' | null
+          source?:              'linkedin' | 'landing_page' | null
+          date_contact?:        string | null
+          notes?:               string | null
+          unipile_chat_id?:     string | null
+          unipile_provider_id?: string | null
+          created_at?:          string
         }
         Relationships: []
       }
