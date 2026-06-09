@@ -26,3 +26,15 @@ export async function getLeads(filters?: {
   if (error) throw new Error(`Erreur récupération leads : ${error.message}`)
   return data
 }
+
+export async function updateLeadStatut(id: string, statut: LeadStatut): Promise<Lead> {
+  const { data, error } = await supabase
+    .from('leads')
+    .update({ statut })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) throw new Error(`Erreur mise à jour statut : ${error.message}`)
+  return data
+}
