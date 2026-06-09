@@ -1,5 +1,5 @@
 import { supabase } from './client'
-import type { LeadInsert, Lead } from './types'
+import type { LeadInsert, Lead, LeadStatut, LeadCible } from './types'
 
 export async function insertLead(lead: LeadInsert): Promise<Lead> {
   const { data, error } = await supabase
@@ -9,5 +9,20 @@ export async function insertLead(lead: LeadInsert): Promise<Lead> {
     .single()
 
   if (error) throw new Error(`Erreur insertion lead : ${error.message}`)
+  return data
+}
+
+export async function getLeads(filters?: {
+  statut?: LeadStatut
+  cible?: LeadCible
+}): Promise<Lead[]> {
+  let query = supabase.from('leads').select('*').order('created_at', { ascending: false })
+
+  if (filters?.statut) query = query.eq('statut', filters.statut)
+  if (filters?.cible)  query = query.eq('cible',  filters.cible)
+
+  const { data, error } = await query
+
+  if (error) throw new Error(`Erreur récupération leads : ${error.message}`)
   return data
 }
