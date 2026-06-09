@@ -55,6 +55,35 @@ export async function startLinkedInChat(
   return handleResponse<ChatStartedResponse>(res)
 }
 
+export interface ProspectionResult {
+  chat_id:    string | null
+  message_id: string | null
+}
+
+/**
+ * Point d'entrée unique pour la prospection.
+ * - Si `chatId` est fourni : envoie dans le chat existant.
+ * - Sinon : démarre une nouvelle conversation avec `providerId`.
+ */
+export async function sendProspectionMessage(params: {
+  accountId:   string
+  text:        string
+  chatId?:     string
+  providerId?: string
+}): Promise<ProspectionResult> {
+  const { accountId, text, chatId, providerId } = params
+
+  if (chatId) {
+    const res = await sendLinkedInMessage(chatId, text)
+    return { chat_id: chatId, message_id: res.message_id }
+  }
+
+  if (!providerId) throw new Error('providerId requis pour démarrer une nouvelle conversation')
+
+  const res = await startLinkedInChat(accountId, providerId, text)
+  return { chat_id: res.chat_id, message_id: res.message_id }
+}
+
 /**
  * Envoie un message dans une conversation LinkedIn existante.
  * @param chatId  ID Unipile du chat
