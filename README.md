@@ -74,17 +74,62 @@ LinkedIn (Unipile)          Landing page
 ```
 pipeline-ldgschool/
 ├── README.md
-├── workflows/
-│   └── n8n/               # Exports des workflows n8n
-├── messages/
-│   ├── drh.md             # Templates messages DRH/RH
-│   ├── dirigeants.md      # Templates messages Dirigeants PME
-│   └── cip.md             # Templates messages CIP
+├── .env.example                  # Variables d'environnement à configurer
 ├── supabase/
-│   └── schema.sql         # Schéma de la base leads
+│   ├── client.ts                 # Client Supabase typé
+│   ├── leads.ts                  # insertLead / getLeads / updateLeadStatut
+│   └── types.ts                  # Types TypeScript générés depuis le schéma
+├── messages/
+│   ├── drh.md                    # Template LinkedIn → DRH/RH
+│   ├── dirigeants.md             # Template LinkedIn → Dirigeants PME
+│   ├── cip.md                    # Template LinkedIn → CIP
+│   ├── reseau-proche.md          # Réactivation réseau proche
+│   └── reseau-croise.md          # Prise de contact réseau croisé
+├── workflows/
+│   └── n8n/                      # Exports des workflows n8n
 └── docs/
-    └── setup.md           # Guide d'installation et configuration
+    └── setup.md                  # Guide d'installation complet
 ```
+
+---
+
+## Schéma Supabase — table `leads`
+
+| Colonne | Type | Valeurs possibles |
+|---|---|---|
+| `id` | UUID | auto-généré |
+| `prenom` | TEXT | — |
+| `nom` | TEXT | — |
+| `email` | TEXT | — |
+| `poste` | TEXT | — |
+| `entreprise` | TEXT | — |
+| `statut` | TEXT | `froid`, `tiede`, `chaud` |
+| `cible` | TEXT | `DRH`, `Dirigeant`, `CIP` |
+| `source` | TEXT | `linkedin`, `landing_page` |
+| `date_contact` | DATE | — |
+| `notes` | TEXT | — |
+| `created_at` | TIMESTAMPTZ | auto |
+
+---
+
+## Fonctions TypeScript disponibles
+
+```ts
+// Insérer un lead
+insertLead(lead: LeadInsert): Promise<Lead>
+
+// Récupérer les leads avec filtres optionnels
+getLeads(filters?: { statut?: LeadStatut, cible?: LeadCible }): Promise<Lead[]>
+
+// Mettre à jour le statut d'un lead
+updateLeadStatut(id: string, statut: LeadStatut): Promise<Lead>
+```
+
+---
+
+## Installation
+
+Voir [docs/setup.md](docs/setup.md).
 
 ---
 
